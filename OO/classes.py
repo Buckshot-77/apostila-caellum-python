@@ -30,7 +30,7 @@ class BankAccount():
     def __init__(self, id: str, owner: Client, current_balance: Decimal, credit_card_limit: Decimal = 1500) -> None:
         self.id = id
         self.owner = owner
-        self.current_balance = Decimal(current_balance)
+        self._current_balance = Decimal(current_balance)
         self.credit_card_limit = Decimal(credit_card_limit)
         self.history = History()
         BankAccount._total_accounts += 1
@@ -64,5 +64,16 @@ class BankAccount():
         else:
             raise ValueError('Withdraw ammount greater than account balance.')
 
+    @property
+    def current_balance(self):
+        return self._current_balance
+
+    @current_balance.setter
+    def current_balance(self, current_balance):
+        if current_balance < 0:
+            raise ValueError("Account balance can't be lower than zero")
+        else:
+            self._current_balance = current_balance
+
     def show_balance(self):
-        return {'account': self.id, 'balance': self.current_balance}
+        return {'account': self.id, 'balance': self._current_balance}
