@@ -1,11 +1,22 @@
 from decimal import Decimal
+from datetime import datetime
+
+
+class Client():
+    def __init__(self, name: str, address: str, cpf: str, birth_date: int) -> None:
+        self.name = name
+        self.address = address
+        self.cpf = cpf
+        self.birth_date = birth_date
+        self.client_since = datetime.today()
 
 
 class BankAccount():
-    def __init__(self, id: str, owner: str, current_balance: Decimal) -> None:
+    def __init__(self, id: str, owner: Client, current_balance: Decimal, credit_card_limit: Decimal = 1500) -> None:
         self.id = id
         self.owner = owner
         self.current_balance = Decimal(current_balance)
+        self.credit_card_limit = Decimal(credit_card_limit)
 
     def deposit(self, added_value):
         if added_value > 0:
@@ -21,14 +32,10 @@ class BankAccount():
 
         if withdrawn_value <= self.current_balance:
             self.current_balance -= Decimal(withdrawn_value)
+            return True
 
         else:
             raise ValueError('Withdraw ammount greater than account balance.')
 
-
-account1 = BankAccount('123-4', 'Hugo', 1000)
-
-
-account1.deposit(300)
-
-print(account1.current_balance)
+    def show_balance(self):
+        return {'account': self.id, 'balance': self.current_balance}
